@@ -1,12 +1,12 @@
+const fs = require("fs");
 const path = require("path");
+const matter = require("gray-matter");
 const markdownIt = require("markdown-it");
 const markdownItContainer = require("markdown-it-container");
 const markdownItAnchor = require("markdown-it-anchor");
 
-// 記事Markdownを検索するためのglobパターン。
-// getFilteredByGlob() は「プロジェクトルートからの絶対パス」で inputPath と照合するため、
-// 相対パスの解釈違いを避けるためにここで絶対パスを組み立てておく。
-const ARTICLES_GLOB = path.join(__dirname, "content/column/articles/*.md");
+// 記事Markdownが置かれているフォルダ（src/ の外側）
+const ARTICLES_DIR = path.join(__dirname, "content/column/articles");
 
 // 見出しIDを安全に生成する関数
 // ・日本語はそのまま活かす（空文字にしない）
@@ -76,18 +76,36 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
 
   // ---------- 記事コレクション ----------
-  eleventyConfig.addCollection("columnArticlesAll", function (collectionApi) {
-    return collectionApi
-      .getFilteredByGlob(ARTICLES_GLOB)
-      .sort(
-        (a, b) => new Date(b.data.publish_date) - new Date(a.data.publish_date)
-      );
+  // content/column/articles/ は src/ の外にあるため、Eleventy標準のコレクションAPI
+  // （getFilteredByGlob等）はdir.inputの外を対象にできない（既知の制限）。
+  // そのため、Node.jsの fs を使って直接ファイルを読み込み、上で設定済みの
+  // markdown-itインスタンス（md）で手動でレンダリングする。
+  function loadColumnArticles() {
+    if (!fs.existsSync(ARTICLES_DIR)) return [];
+    return fs
+      .readdirSync(ARTICLES_DIR)
+      .filter((filename) => filename.endsWith(".md"))
+      .map((filename) => {
+        const filePath = path.join(ARTICLES_DIR, filename);
+        const raw = fs.readFileSync(filePath, "utf8");
+        const parsed = matter(raw);
+        return {
+          data: parsed.data || {},
+          templateContent: md.render(parsed.content || ""),
+          inputPath: filePath,
+        };
+      });
+  }
+
+  eleventyConfig.addCollection("columnArticlesAll", function () {
+    return loadColumnArticles().sort(
+      (a, b) => new Date(b.data.publish_date) - new Date(a.data.publish_date)
+    );
   });
 
-  eleventyConfig.addCollection("columnArticles", function (collectionApi) {
+  eleventyConfig.addCollection("columnArticles", function () {
     const now = new Date();
-    return collectionApi
-      .getFilteredByGlob(ARTICLES_GLOB)
+    return loadColumnArticles()
       .filter((item) => {
         if (item.data.draft) return false;
         if (!item.data.publish_date) return false;
@@ -99,16 +117,16 @@ module.exports = function (eleventyConfig) {
       );
   });
 
-  eleventyConfig.addCollection("columnTagList", function (collectionApi) {
+  // タグ一覧（公開記事のみが持つタグだけを集計。記事がなければ0件＝タグページも0件生成となり、
+  // 「空のタグページを大量生成しない」という要件を自然に満たす）
+  eleventyConfig.addCollection("columnTagList", function () {
     const now = new Date();
-    const articles = collectionApi
-      .getFilteredByGlob(ARTICLES_GLOB)
-      .filter((item) => {
-        if (item.data.draft) return false;
-        if (!item.data.publish_date) return false;
-        if (new Date(item.data.publish_date) > now) return false;
-        return true;
-      });
+    const articles = loadColumnArticles().filter((item) => {
+      if (item.data.draft) return false;
+      if (!item.data.publish_date) return false;
+      if (new Date(item.data.publish_date) > now) return false;
+      return true;
+    });
     const set = new Set();
     articles.forEach((a) => (a.data.tags || []).forEach((t) => set.add(t)));
     return Array.from(set).map((tag) => ({ tag }));

@@ -1,7 +1,7 @@
 ---
 title: テスト記事
 slug: test-article
-draft: true
+draft: false
 publish_date: 2026-07-11T18:03:00.000+09:00
 author: UC Session
 category: senzaiishiki

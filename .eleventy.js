@@ -1,6 +1,12 @@
+const path = require("path");
 const markdownIt = require("markdown-it");
 const markdownItContainer = require("markdown-it-container");
 const markdownItAnchor = require("markdown-it-anchor");
+
+// 記事Markdownを検索するためのglobパターン。
+// getFilteredByGlob() は「プロジェクトルートからの絶対パス」で inputPath と照合するため、
+// 相対パスの解釈違いを避けるためにここで絶対パスを組み立てておく。
+const ARTICLES_GLOB = path.join(__dirname, "content/column/articles/*.md");
 
 // 見出しIDを安全に生成する関数
 // ・日本語はそのまま活かす（空文字にしない）
@@ -72,7 +78,7 @@ module.exports = function (eleventyConfig) {
   // ---------- 記事コレクション ----------
   eleventyConfig.addCollection("columnArticlesAll", function (collectionApi) {
     return collectionApi
-      .getFilteredByGlob("content/column/articles/*.md")
+      .getFilteredByGlob(ARTICLES_GLOB)
       .sort(
         (a, b) => new Date(b.data.publish_date) - new Date(a.data.publish_date)
       );
@@ -81,7 +87,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("columnArticles", function (collectionApi) {
     const now = new Date();
     return collectionApi
-      .getFilteredByGlob("content/column/articles/*.md")
+      .getFilteredByGlob(ARTICLES_GLOB)
       .filter((item) => {
         if (item.data.draft) return false;
         if (!item.data.publish_date) return false;
@@ -96,7 +102,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("columnTagList", function (collectionApi) {
     const now = new Date();
     const articles = collectionApi
-      .getFilteredByGlob("content/column/articles/*.md")
+      .getFilteredByGlob(ARTICLES_GLOB)
       .filter((item) => {
         if (item.data.draft) return false;
         if (!item.data.publish_date) return false;
@@ -216,8 +222,7 @@ module.exports = function (eleventyConfig) {
     const idx = allArticles.findIndex((a) => a.data.slug === currentArticle.data.slug);
     if (idx <= 0) return null;
     return allArticles[idx - 1];
-  });
-  eleventyConfig.addFilter("allTags", function (allArticles) {
+  });eleventyConfig.addFilter("allTags", function (allArticles) {
     const set = new Set();
     allArticles.forEach((a) => {
       (a.data.tags || []).forEach((t) => set.add(t));

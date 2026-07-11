@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UC Session コラム管理画面</title>
+<meta name="robots" content="noindex,nofollow" />
+<script>
+  // カスタムのEditor Componentを登録してから初期化したいため、自動初期化を止める
+  window.CMS_MANUAL_INIT = true;
+</script>
+</head>
+<body>
+<script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<script>
+  // 本文中の「補足ボックス」（:::note ... :::）をエディターのボタンから挿入できるようにする
+  CMS.registerEditorComponent({
+    id: "callout-note",
+    label: "補足ボックス",
+    fields: [{ name: "body", label: "本文", widget: "text" }],
+    pattern: /^:::note\n([\s\S]*?)\n:::$/,
+    fromBlock: function (match) {
+      return { body: match[1] };
+    },
+    toBlock: function (obj) {
+      return ":::note\n" + (obj.body || "") + "\n:::";
+    },
+    toPreview: function (obj) {
+      return (
+        '<div style="border-left:3px solid #C9818F;padding:.8em 1em;background:#F5F0E6;border-radius:8px">' +
+        (obj.body || "") +
+        "</div>"
+      );
+    },
+  });
+
+  // 本文中インラインCTA（:::cta ... :::）
+  CMS.registerEditorComponent({
+    id: "inline-cta",
+    label: "本文中CTA",
+    fields: [{ name: "body", label: "本文", widget: "text" }],
+    pattern: /^:::cta\n([\s\S]*?)\n:::$/,
+    fromBlock: function (match) {
+      return { body: match[1] };
+    },
+    toBlock: function (obj) {
+      return ":::cta\n" + (obj.body || "") + "\n:::";
+    },
+    toPreview: function (obj) {
+      return (
+        '<div style="padding:1em;text-align:center;background:#3D2F1E;color:#fff;border-radius:8px">' +
+        (obj.body || "") +
+        "</div>"
+      );
+    },
+  });
+
+  CMS.init();
+</script>
+</body>
+</html>

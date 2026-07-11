@@ -167,3 +167,245 @@ module.exports = function (eleventyConfig) {
         text: match[3].replace(/<[^>]+>/g, "").trim(),
       });
     }
+    return items;
+  });
+
+  eleventyConfig.addFilter("relatedArticles", function (
+    currentArticle,
+    allArticles
+  ) {
+    if (!currentArticle || !allArticles) return [];
+    const current = currentArticle.data;
+    const pool = allArticles.filter((a) => a.data.slug !== current.slug);
+    let picks = [];
+
+    if (current.related_articles && current.related_articles.length) {
+      current.related_articles.forEach((slug) => {
+        const found = pool.find((a) => a.data.slug === slug);
+        if (found && !picks.includes(found)) picks.push(found);
+      });
+    }
+    if (picks.length < 4) {
+      const sameCat = pool.filter(
+        (a) => a.data.category === current.category && !picks.includes(a)
+      );
+      picks = picks.concat(sameCat.slice(0, 4 - picks.length));
+    }
+    if (picks.length < 4 && current.tags && current.tags.length) {
+      const sameTag = pool.filter(
+        (a) =>
+          !picks.includes(a) &&
+          a.data.tags &&
+          a.data.tags.some((t) => current.tags.includes(t))
+      );
+      picks = picks.concat(sameTag.slice(0, 4 - picks.length));
+    }
+    if (picks.length < 4) {
+      const recent = pool.filter((a) => !picks.includes(a));
+      picks = picks.concat(recent.slice(0, 4 - picks.length));
+    }
+    return picks.slice(0, 4);
+  });
+
+  eleventyConfig.addFilter("prevArticle", function (currentArticle, allArticles) {
+    const idx = allArticles.findIndex((a) => a.data.slug === currentArticle.data.slug);
+    if (idx === -1 || idx === allArticles.length - 1) return null;
+    return allArticles[idx + 1];
+  });
+  eleventyConfig.addFilter("nextArticle", function (currentArticle, allArticles) {
+    const idx = allArticles.findIndex((a) => a.data.slug === currentArticle.data.slug);
+    if (idx <= 0) return null;
+    return allArticles[idx - 1];
+  });
+  eleventyConfig.addFilter("allTags", function (allArticles) {
+    const set = new Set();
+    allArticles.forEach((a) => {
+      (a.data.tags || []).forEach((t) => set.add(t));
+    });
+    return Array.from(set);
+  });
+
+  eleventyConfig.addFilter("byTag", function (allArticles, tag) {
+    return allArticles.filter((a) => (a.data.tags || []).includes(tag));
+  });
+
+  eleventyConfig.addFilter("byCategory", function (allArticles, categorySlug) {
+    return allArticles.filter((a) => a.data.category === categorySlug);
+  });
+
+  eleventyConfig.addFilter("featuredOnly", function (allArticles) {
+    return (allArticles || []).filter((a) => a.data.featured);
+  });
+
+  eleventyConfig.addFilter("firstN", function (allArticles, n) {
+    return (allArticles || []).slice(0, n);
+  });
+
+  eleventyConfig.addFilter("absoluteUrl", function (path, siteUrl) {
+    if (!path) return siteUrl;
+    if (path.startsWith("http")) return path;
+    return siteUrl.replace(/\/$/, "") + path;
+  });
+
+  eleventyConfig.addFilter("metaTitle", function (data, siteName) {
+    if (!data) return siteName || "";
+    const base =
+      data.seo_title && String(data.seo_title).trim()
+        ? String(data.seo_title).trim()
+        : data.title || "";
+    if (!base) return siteName || "";
+    if (siteName && !base.includes(siteName)) {
+      return `${base}｜${siteName}コラム`;
+    }
+    return base;
+  });
+
+  eleventyConfig.addFilter("metaDescription", function (data, defaultText) {
+    if (!data) return defaultText || "";
+    if (data.meta_description && String(data.meta_description).trim()) {
+      const clean = String(data.meta_description).trim();
+      return clean.length > 160 ? clean.slice(0, 160) : clean;
+    }
+    if (data.excerpt && String(data.excerpt).trim()) {
+      const clean = String(data.excerpt)
+        .replace(/<[^>]+>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      return clean.length > 160 ? clean.slice(0, 157) + "…" : clean;
+    }
+    return defaultText || "";
+  });
+
+  eleventyConfig.addFilter("canonicalFor", function (data, siteUrl, fallbackPath) {
+    const base = String(siteUrl || "").replace(/\/$/, "");
+    if (data && data.canonical_url && String(data.canonical_url).trim()) {
+      return String(data.canonical_url).trim();
+    }
+    return base + (fallbackPath || "/");
+  });
+
+  // OGP画像URL（① og_image指定 → ② featured_image → ③ サイト共通のog-image.jpg の優先順）
+  eleventyConfig.addFilter("ogImageFor", function (data, site) {
+    const base = String((site && site.siteUrl) || "").replace(/\/$/, "");
+    if (data && data.og_image && String(data.og_image).trim()) {
+      const img = String(data.og_image).trim();
+      return img.startsWith("http") ? img : base + img;
+    }
+    if (data && data.featured_image && String(data.featured_image).trim()) {
+      const img = String(data.featured_image).trim();
+      return img.startsWith("http") ? img : base + img;
+    }
+    return base + ((site && site.ogImagePath) || "/og-image.jpg");
+  });
+
+  eleventyConfig.addFilter("robotsMeta", function (data) {
+    if (data && data.noindex) return "noindex,follow";
+    return "index,follow";
+  });
+
+  eleventyConfig.addFilter("articleStructuredData", function (articleData, site) {
+    const base = String((site && site.siteUrl) || "").replace(/\/$/, "");
+    const url = base + "/column/" + articleData.slug + "/";
+    const published = articleData.publish_date
+      ? new Date(articleData.publish_date).toISOString()
+      : undefined;
+    const modified = articleData.updated_date
+      ? new Date(articleData.updated_date).toISOString()
+      : published;
+
+    const articleNode = {
+      "@type": "Article",
+      headline: articleData.title,
+      description:
+        articleData.meta_description ||
+        articleData.excerpt ||
+        (site && site.defaultMetaDescription) ||
+        "",
+      url: url,
+      author: {
+        "@type": "Person",
+        name: articleData.author || (site && site.siteName) || "",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: (site && site.siteName) || "",
+        logo: {
+          "@type": "ImageObject",
+          url: base + ((site && site.ogImagePath) || "/og-image.jpg"),
+        },
+      },
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    };
+    if (published) articleNode.datePublished = published;
+    if (modified) articleNode.dateModified = modified;
+    if (articleData.featured_image) {
+      articleNode.image = articleData.featured_image.startsWith("http")
+        ? articleData.featured_image
+        : base + articleData.featured_image;
+    }
+
+    const graph = [articleNode];
+
+    graph.push({
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "ホーム", item: base + "/" },
+        { "@type": "ListItem", position: 2, name: "コラム", item: base + "/column/" },
+        { "@type": "ListItem", position: 3, name: articleData.title, item: url },
+      ],
+    });
+
+    if (Array.isArray(articleData.faq) && articleData.faq.length) {
+      graph.push({
+        "@type": "FAQPage",
+        mainEntity: articleData.faq.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      });
+    }
+
+    return { "@context": "https://schema.org", "@graph": graph };
+  });
+
+  eleventyConfig.addFilter("listPageStructuredData", function (
+    site,
+    pageName,
+    pagePath
+  ) {
+    const base = String((site && site.siteUrl) || "").replace(/\/$/, "");
+    const url = base + pagePath;
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          name: pageName,
+          url: url,
+        },
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "ホーム", item: base + "/" },
+            { "@type": "ListItem", position: 2, name: "コラム", item: base + "/column/" },
+            { "@type": "ListItem", position: 3, name: pageName, item: url },
+          ],
+        },
+      ],
+    };
+  });
+
+  return {
+    dir: {
+      input: "src",
+      output: "_site",
+      includes: "_includes",
+      data: "_data",
+    },
+    templateFormats: ["njk", "md", "html"],
+    markdownTemplateEngine: "njk",
+    htmlTemplateEngine: "njk",
+    dataTemplateEngine: "njk",
+  };
+};

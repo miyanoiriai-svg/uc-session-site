@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://uc-session-since2017.netlify.app/sitemap.xml

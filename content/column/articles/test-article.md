@@ -1,7 +1,7 @@
 ---
 title: 宇宙と繋がるとは？感覚やサインを受け取るために大切なこと
 slug: universe-connection-signs
-draft: false
+draft: true
 publish_date: 2026-07-11T19:12:00.000+09:00
 author: UC Session
 supervisor: 宇宙

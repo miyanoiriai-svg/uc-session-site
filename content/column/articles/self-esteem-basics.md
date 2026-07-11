@@ -1,7 +1,7 @@
 ---
 title: 自己肯定感が低い原因とは？今日からできる高め方
 slug: self-esteem-basics
-draft: true
+draft: false
 publish_date: 2026-07-12T08:20:00.000+09:00
 author: UC Session
 category: jikokouteikan

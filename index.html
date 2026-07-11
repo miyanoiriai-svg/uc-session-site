@@ -245,6 +245,12 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
   border:1px solid var(--gold);border-radius:2px;padding:.6rem 1.3rem;transition:background .4s,color .4s;
 }
 .header-cta:hover{background:var(--gold);color:#fff}
+.header-nav{display:flex;align-items:center;gap:1.2rem}
+.header-column-link{
+  font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;
+  color:var(--text-strong);text-decoration:none;transition:color .4s;
+}
+.header-column-link:hover{color:var(--gold)}
 @media(max-width:560px){.header-cta{display:none}}
 
 /* ---------- botanical accent ---------- */
@@ -723,7 +729,10 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
     <span class="mark">UC</span>
     <span class="sub">Universe Connect</span>
   </a>
-  <a class="header-cta" href="https://teikei-uc-2026.netlify.app/" target="_blank" rel="noopener" data-cta="booking">UCセラピスト一覧・予約</a>
+  <nav class="header-nav">
+    <a class="header-column-link" href="/column/">コラム</a>
+    <a class="header-cta" href="https://teikei-uc-2026.netlify.app/" target="_blank" rel="noopener" data-cta="booking">UCセラピスト一覧・予約</a>
+  </nav>
 </header>
 
 <!-- ============ HERO ============ -->

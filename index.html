@@ -482,7 +482,7 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
 
 /* ---------- video ---------- */
 .video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:linear-gradient(160deg,#EAF2EE,#F5FAF8);border:1px solid var(--line);display:grid;place-items:center;box-shadow:var(--shadow)}
-.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-frame iframe,.video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
 .video-placeholder{display:grid;place-items:center;gap:1rem;text-align:center;color:var(--text-muted);padding:2rem}
 .play{width:70px;height:70px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold-deep);background:rgba(255,253,247,.6)}
 .play svg{width:24px;height:24px;margin-left:4px}
@@ -770,6 +770,22 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
     <p class="hero-mark reveal d4">since 2017</p>
   </div>
   <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+</section>
+
+<!-- ============ オープニングムービー ============ -->
+<section class="section light-section no-topfade" id="opening-movie">
+  <div class="container narrow section-head">
+    <span class="eyebrow center reveal">Opening Movie</span>
+    <h2 class="h2 reveal d1">UC Sessionへようこそ</h2>
+  </div>
+  <div class="container tight">
+    <div class="video-frame reveal d2">
+      <video controls playsinline preload="metadata">
+        <source src="/assets/opening.mp4" type="video/mp4" />
+        お使いのブラウザは動画の再生に対応していません。
+      </video>
+    </div>
+  </div>
 </section>
 
 <!-- ============ 1. こんな経験はありませんか？ ============ -->

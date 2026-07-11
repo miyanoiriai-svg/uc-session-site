@@ -485,14 +485,8 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
 .video-frame iframe,.video-frame video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}
 
 /* ---------- オープニング動画（背景動画セクション） ---------- */
-.opening-movie-section{position:relative;overflow:hidden;min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center}
+.opening-movie-section{position:relative;overflow:hidden;width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;text-align:center}
 .opening-movie-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.opening-movie-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,20,21,.42) 0%,rgba(8,20,21,.5) 100%);z-index:1}
-.opening-movie-inner{position:relative;z-index:2;padding:2rem 1.5rem}
-.opening-movie-inner .eyebrow{justify-content:center;color:var(--gold-soft)}
-.opening-movie-inner .eyebrow::before,.opening-movie-inner .eyebrow.center::after{background:var(--gold-soft)}
-.opening-movie-inner h2{color:#fff;margin-top:1.2rem}
-@media(max-width:900px){.opening-movie-section{min-height:56vh}}
 .video-placeholder{display:grid;place-items:center;gap:1rem;text-align:center;color:var(--text-muted);padding:2rem}
 .play{width:70px;height:70px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold-deep);background:rgba(255,253,247,.6)}
 .play svg{width:24px;height:24px;margin-left:4px}
@@ -986,11 +980,6 @@ h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
   <video class="opening-movie-video" autoplay muted loop playsinline preload="auto">
     <source src="/assets/opening.mp4" type="video/mp4" />
   </video>
-  <div class="opening-movie-overlay"></div>
-  <div class="opening-movie-inner reveal d1">
-    <span class="eyebrow">Opening Movie</span>
-    <h2 class="h2">UC Sessionへようこそ</h2>
-  </div>
 </section>
 
 <!-- ============ 6. UCセラピストとは ============ -->

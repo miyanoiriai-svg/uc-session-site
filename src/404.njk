@@ -1,0 +1,23 @@
+---
+layout: base.njk
+permalink: /404.html
+pageTitle: "ページが見つかりません | UC Session"
+pageDescription: "お探しのページが見つかりませんでした。URLをご確認いただくか、トップページまたはコラムから改めてお探しください。"
+robotsContent: "noindex,follow"
+ogType: "website"
+eleventyComputed:
+  canonicalUrl: "{{ site.siteUrl }}/404.html"
+  ogImageUrl: "{{ site.siteUrl }}{{ site.ogImagePath }}"
+---
+<section class="container tight section" style="text-align:center">
+  <p class="eyebrow center">404</p>
+  <h1 class="display" style="margin-top:1rem">ページが見つかりません</h1>
+  <p class="lead" style="margin-top:1.4rem">
+    お探しのページは移動または削除された可能性があります。<br>
+    URLをご確認いただくか、下記からお探しください。
+  </p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.4rem">
+    <a class="btn btn-gold" href="/">トップページへ</a>
+    <a class="btn btn-outline" href="/column/">コラムを見る</a>
+  </div>
+</section>

@@ -1,0 +1,133 @@
+backend:
+  name: github
+  repo: miyanoiriai-svg/uc-session-site
+  branch: main
+
+# Decap CMSでの保存＝mainブランチへ直接コミット（シンプルさ優先）。
+# 公開・非公開の制御はワークフロー機能ではなく、記事側の「下書き」項目で行う。
+publish_mode: simple
+
+# アップロード画像・記事エントリのファイル名を半角英数字化する
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+media_folder: "src/assets/images/column"
+public_folder: "/assets/images/column"
+
+collections:
+  - name: "articles"
+    label: "コラム記事"
+    label_singular: "コラム記事"
+    folder: "content/column/articles"
+    create: true
+    slug: "{{fields.slug}}"
+    identifier_field: title
+    summary: "{{title}} — {{draft}}"
+    fields:
+      - { label: "タイトル", name: "title", widget: "string" }
+      - label: "URLスラッグ（半角英数字とハイフンのみ／例：universe-connection）"
+        name: "slug"
+        widget: "string"
+        pattern: ["^[a-z0-9-]+$", "半角の小文字英数字とハイフンのみ使用できます"]
+      - label: "下書き（チェックが付いている間は本番サイトに表示されません）"
+        name: "draft"
+        widget: "boolean"
+        default: true
+      - { label: "公開日", name: "publish_date", widget: "datetime" }
+      - label: "更新日（更新した場合のみ入力）"
+        name: "updated_date"
+        widget: "datetime"
+        required: false
+      - { label: "執筆者", name: "author", widget: "string", default: "UC Session" }
+      - { label: "監修者（いれば）", name: "supervisor", widget: "string", required: false }
+      - label: "カテゴリー"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "潜在意識", value: "senzaiishiki" }
+          - { label: "自己肯定感", value: "jikokouteikan" }
+          - { label: "宇宙", value: "uchu" }
+          - { label: "スピリチュアル", value: "spiritual" }
+          - { label: "波動", value: "hado" }
+          - { label: "引き寄せ", value: "hikiyose" }
+          - { label: "恋愛", value: "renai" }
+          - { label: "人間関係", value: "ningenkankei" }
+          - { label: "仕事", value: "shigoto" }
+          - { label: "お金", value: "okane" }
+          - { label: "生き方", value: "ikikata" }
+          - { label: "UCセッションについて", value: "uc-session" }
+      - label: "タグ"
+        name: "tags"
+        widget: "list"
+        required: false
+        default: []
+      - label: "注目記事として表示する"
+        name: "featured"
+        widget: "boolean"
+        default: false
+      - label: "アイキャッチ画像"
+        name: "featured_image"
+        widget: "image"
+        required: false
+      - label: "アイキャッチ画像のalt（代替テキスト）"
+        name: "featured_image_alt"
+        widget: "string"
+        required: false
+      - label: "抜粋（記事一覧・meta descriptionの元になります）"
+        name: "excerpt"
+        widget: "text"
+      - label: "本文"
+        name: "body"
+        widget: "markdown"
+        editor_components: ["callout-note", "inline-cta"]
+        modes: ["rich_text"]
+      - label: "参考文献・出典（あれば）"
+        name: "references"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "タイトル", name: "title", widget: "string" }
+          - { label: "URL", name: "url", widget: "string", required: false }
+      - label: "FAQ（実際にある場合のみ入力）"
+        name: "faq"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "質問", name: "q", widget: "string" }
+          - { label: "回答", name: "a", widget: "text" }
+      - label: "関連記事（スラッグを手動指定・任意）"
+        name: "related_articles"
+        widget: "list"
+        required: false
+      - label: "目次を表示する"
+        name: "toc_enabled"
+        widget: "boolean"
+        default: true
+      - label: "記事下部にCTAを表示する"
+        name: "footer_cta_enabled"
+        widget: "boolean"
+        default: true
+      - label: "SEO用タイトル（省略可・未入力ならタイトルがそのまま使われます）"
+        name: "seo_title"
+        widget: "string"
+        required: false
+        hint: "以下はすべてSEOの詳細設定です。基本的に未入力のままで問題ありません"
+      - label: "meta description"
+        name: "meta_description"
+        widget: "text"
+        required: false
+        hint: "未入力なら抜粋から自動生成されます"
+      - label: "OGP画像（SNSシェア用。未入力ならアイキャッチ画像を使用）"
+        name: "og_image"
+        widget: "image"
+        required: false
+      - label: "canonical URL（通常は空欄のままにしてください）"
+        name: "canonical_url"
+        widget: "string"
+        required: false
+      - label: "検索エンジンにインデックスさせない（noindex）"
+        name: "noindex"
+        widget: "boolean"
+        default: false

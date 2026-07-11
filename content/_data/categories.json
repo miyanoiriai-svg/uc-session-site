@@ -1,0 +1,14 @@
+{
+  "senzaiishiki": { "name": "潜在意識", "description": "潜在意識の仕組みや書き換えについてのコラムです。" },
+  "jikokouteikan": { "name": "自己肯定感", "description": "自己肯定感を育むための考え方や習慣についてのコラムです。" },
+  "uchu": { "name": "宇宙", "description": "宇宙意識との繋がりについてのコラムです。" },
+  "spiritual": { "name": "スピリチュアル", "description": "スピリチュアルな視点から日々のヒントをお届けするコラムです。" },
+  "hado": { "name": "波動", "description": "波動や心と体の状態についてのコラムです。" },
+  "hikiyose": { "name": "引き寄せ", "description": "引き寄せの考え方や実践についてのコラムです。" },
+  "renai": { "name": "恋愛", "description": "恋愛にまつわる潜在意識のパターンについてのコラムです。" },
+  "ningenkankei": { "name": "人間関係", "description": "人間関係の悩みや関わり方についてのコラムです。" },
+  "shigoto": { "name": "仕事", "description": "仕事やキャリアにまつわるコラムです。" },
+  "okane": { "name": "お金", "description": "お金との向き合い方についてのコラムです。" },
+  "ikikata": { "name": "生き方", "description": "これからの生き方や選択のヒントについてのコラムです。" },
+  "uc-session": { "name": "UCセッションについて", "description": "UCセッションそのものについて詳しく解説するコラムです。" }
+}

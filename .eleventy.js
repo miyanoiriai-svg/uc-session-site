@@ -26,7 +26,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("index.html");
   eleventyConfig.addPassthroughCopy("og-image.jpg");
   eleventyConfig.addPassthroughCopy("robots.txt");
-  eleventyConfig.addPassthroughCopy("sitemap.xml");
 
   // コラム用の静的アセット（CSS・JS・アップロード画像）
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });

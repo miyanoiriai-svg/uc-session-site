@@ -1,7 +1,7 @@
 [build]
   # Eleventyでビルドした後、最終念のためのステップとして
   # 既存の主要ファイルを出力先へ直接上書きコピーする（安全ネット）
-  command = "npm run build && cp index.html og-image.jpg robots.txt sitemap.xml _site/"
+  command = "npm run build && cp index.html og-image.jpg robots.txt sitemap.xml _site/ && cp -r admin _site/"
   publish = "_site"
 
 [[headers]]

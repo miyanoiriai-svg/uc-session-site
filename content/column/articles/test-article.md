@@ -1,16 +1,12 @@
 ---
 title: 宇宙と繋がるとは？感覚やサインを受け取るために大切なこと
 slug: universe-connection-signs
-draft: true
+draft: false
 publish_date: 2026-07-11T19:12:00.000+09:00
 author: UC Session
 supervisor: 宇宙
 category: uchu
-tags:
-  - 宇宙意識
-  - 直感
-  - 潜在意識
-  - サイン
+tags: []
 featured: false
 excerpt: 宇宙意識と繋がるという感覚は、特別な人だけのものではありません。日常の中にある小さな直感やタイミングの一致に気づくことから、その繋がりは始まります。
 faq:

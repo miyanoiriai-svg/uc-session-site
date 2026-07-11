@@ -82,7 +82,7 @@ collections:
         name: "body"
         widget: "markdown"
         editor_components: ["callout-note", "inline-cta"]
-        modes: ["rich_text"]
+        modes: ["rich_text", "raw"]
       - label: "参考文献・出典（あれば）"
         name: "references"
         widget: "list"

@@ -1,0 +1,35 @@
+---
+pagination:
+  data: collections.columnTagList
+  size: 1
+  alias: tagItem
+permalink: "/column/tag/{{ tagItem.tag | urlencode }}/"
+layout: base.njk
+---
+{% from "partials/breadcrumb.njk" import breadcrumb %}
+{% from "partials/article-card.njk" import articleCard %}
+{% from "partials/cta.njk" import footerCta %}
+
+{% set tagArticles = collections.columnArticles | byTag(tagItem.tag) %}
+{% set tagUrl = "/column/tag/" + (tagItem.tag | urlencode) + "/" %}
+
+<div class="container narrow section" style="padding-bottom:0">
+  {{ breadcrumb([{label:"ホーム",url:"/"},{label:"コラム",url:"/column/"},{label:"タグ：" + tagItem.tag,url:tagUrl}]) }}
+</div>
+
+<section class="container tight" style="text-align:center">
+  <p class="eyebrow center">TAG</p>
+  <h1 class="h2" style="margin-top:.8rem">「{{ tagItem.tag }}」の記事</h1>
+</section>
+
+<section class="container section" style="padding-top:0">
+  <div class="column-grid">
+    {% for article in tagArticles %}
+      {{ articleCard(article, categories) }}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container tight section">
+  {{ footerCta(site) }}
+</section>

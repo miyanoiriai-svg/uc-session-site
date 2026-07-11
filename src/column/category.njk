@@ -1,0 +1,41 @@
+---
+pagination:
+  data: categoryList
+  size: 1
+  alias: cat
+permalink: "/column/category/{{ cat.slug }}/"
+layout: base.njk
+---
+{% from "partials/breadcrumb.njk" import breadcrumb %}
+{% from "partials/article-card.njk" import articleCard %}
+{% from "partials/cta.njk" import footerCta %}
+
+{% set catArticles = collections.columnArticles | byCategory(cat.slug) %}
+
+<div class="container narrow section" style="padding-bottom:0">
+  {{ breadcrumb([{label:"ホーム",url:"/"},{label:"コラム",url:"/column/"},{label:cat.name,url:"/column/category/" + cat.slug + "/"}]) }}
+</div>
+
+<section class="container tight" style="text-align:center">
+  <p class="eyebrow center">CATEGORY</p>
+  <h1 class="h2" style="margin-top:.8rem">{{ cat.name }}</h1>
+  <p class="lead" style="margin-top:1rem">{{ cat.description }}</p>
+</section>
+
+{% if catArticles.length == 0 %}
+<section class="container tight section" style="padding-top:0">
+  <p class="empty-state">現在、このテーマの記事は準備中です。公開まで今しばらくお待ちください。</p>
+</section>
+{% else %}
+<section class="container section" style="padding-top:0">
+  <div class="column-grid">
+    {% for article in catArticles %}
+      {{ articleCard(article, categories) }}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="container tight section">
+  {{ footerCta(site) }}
+</section>

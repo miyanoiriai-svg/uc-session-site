@@ -1,1 +1,287 @@
-/* コラム用CSS。②の工程で追加します。 */
+/* ==========================================================
+   column.css
+   コラム（/column/）専用スタイル。
+
+   このファイルの前半（トークン〜カードまで）は、既存 index.html の
+   <style> 内にある値を「そのままコピー」したものです。新しい色・
+   新しいフォント・新しい余白の数値は追加していません。
+   後半のみ、コラム機能のために新規追加したクラスです。
+   ========================================================== */
+
+/* ---------- 既存トークン（そのまま再利用） ---------- */
+:root{
+  --ivory:#1A1613;
+  --cream:#211C17;
+  --beige:#120F0C;
+  --beige-2:#2C2620;
+  --sand:#3A3228;
+  --mocha:#D9AFB0;
+  --mocha-deep:#F2DEDC;
+  --gold:#E0A9B0;
+  --gold-deep:#C9818F;
+  --gold-soft:#F2D2D6;
+  --text:#C9C0AC;
+  --text-strong:#F5F0E6;
+  --text-muted:#9C9280;
+  --on-deep:#F5F0E6;
+  --on-deep-muted:#ACA290;
+  --line:rgba(224,169,176,.18);
+  --line-deep:rgba(224,169,176,.16);
+
+  --serif:"Playfair Display","Noto Serif JP",serif;
+  --jp-serif:"Noto Serif JP","Playfair Display",serif;
+  --sans:"Outfit","Noto Sans JP",system-ui,sans-serif;
+  --jp-sans:"Noto Sans JP","Outfit",system-ui,sans-serif;
+
+  --maxw:1080px;
+  --pad-block:clamp(5rem,12vw,9.5rem);
+  --pad-inline:clamp(1.25rem,5vw,2rem);
+  --radius:12px;
+  --shadow:0 26px 56px -34px rgba(0,0,0,.6);
+}
+
+.light-section{
+  --cream:#FFFFFF;
+  --ivory:#F7F3EA;
+  --beige:#EFE9DC;
+  --beige-2:#E4DBC8;
+  --text:#4A4636;
+  --text-strong:#2C2A22;
+  --text-muted:#857E6C;
+  --on-deep:#2C2A22;
+  --on-deep-muted:#6E6755;
+  --gold:#C98995;
+  --gold-deep:#A15C6B;
+  --gold-soft:#D69AA3;
+  --line:rgba(60,50,30,.12);
+  --line-deep:rgba(60,50,30,.12);
+  --mocha:#6E5D46;
+  --shadow:0 20px 48px -30px rgba(60,50,40,.35);
+  background:
+    radial-gradient(60% 40% at 85% 0%, rgba(200,140,150,.07), transparent 60%),
+    linear-gradient(180deg,#FAF6EE 0%, #F4EEE1 100%);
+  color:var(--text);
+  position:relative;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--jp-sans);
+  color:var(--text);
+  background:
+    radial-gradient(60% 40% at 80% 8%, rgba(190,120,135,.20), transparent 60%),
+    radial-gradient(55% 38% at 12% 22%, rgba(145,105,58,.18), transparent 60%),
+    radial-gradient(50% 35% at 90% 70%, rgba(190,120,135,.15), transparent 62%),
+    linear-gradient(180deg,#120F0C 0%, #1A1512 40%, #100D0A 100%);
+  background-attachment:fixed;
+  line-height:1.95;
+  font-weight:400;
+  letter-spacing:.012em;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+@media(max-width:900px){ body{ background-attachment:scroll } }
+
+img{max-width:100%;display:block}
+a{color:inherit}
+
+.container{max-width:var(--maxw);margin-inline:auto;width:100%}
+.narrow{max-width:760px}
+.tight{max-width:640px}
+.section{padding-block:var(--pad-block);padding-inline:var(--pad-inline);position:relative}
+
+.eyebrow{
+  font-family:var(--sans);font-size:.7rem;font-weight:400;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--gold-deep);display:flex;align-items:center;gap:.8rem;
+}
+.eyebrow.center{justify-content:center}
+.eyebrow.center::after{content:"";width:26px;height:1px;background:var(--gold);opacity:.8}
+
+h1,h2,h3{font-weight:500;line-height:1.55;letter-spacing:.03em}
+.display{font-family:var(--jp-serif);font-weight:400;font-size:clamp(1.9rem,5.6vw,3.4rem);line-height:1.5;letter-spacing:.03em}
+.h2{font-family:var(--jp-serif);font-weight:500;font-size:clamp(1.75rem,4.8vw,2.9rem);line-height:1.5;letter-spacing:.03em;color:var(--text-strong)}
+.h3{font-family:var(--jp-serif);font-weight:500;font-size:clamp(1.22rem,2.7vw,1.55rem);letter-spacing:.03em;color:var(--text-strong)}
+.lead{font-size:clamp(1rem,1.6vw,1.1rem);color:var(--text-muted);line-height:2.2;font-weight:300}
+
+/* ---------- ボタン（既存と同一） ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;font-family:var(--sans);font-weight:500;
+  font-size:.86rem;letter-spacing:.16em;padding:1.05rem 2.4rem;border-radius:2px;cursor:pointer;border:none;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s,background .4s,color .4s,border-color .4s;line-height:1.5;
+  text-align:center;max-width:90%;text-decoration:none;
+}
+.btn-gold{background:linear-gradient(120deg,var(--gold-deep),var(--gold) 55%,var(--gold-soft));color:#1F1710;box-shadow:0 16px 38px -18px rgba(180,110,122,.75)}
+.btn-gold:hover{transform:translateY(-3px);background:var(--gold-deep);box-shadow:0 22px 48px -18px rgba(180,110,122,.85)}
+.btn-outline{background:transparent;color:var(--cream);border:1px solid rgba(246,239,226,.5)}
+.btn-outline:hover{transform:translateY(-3px);border-color:var(--gold-soft);background:rgba(246,239,226,.08)}
+.btn-ghost{background:transparent;color:var(--on-deep);border:1px solid rgba(224,169,176,.45)}
+.btn-ghost:hover{transform:translateY(-3px);background:rgba(224,169,176,.1);border-color:var(--gold)}
+
+/* ---------- ヘッダー（既存と同一。①で追加した.header-nav含む） ---------- */
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem var(--pad-inline);transition:background .5s,backdrop-filter .5s,padding .5s,border-color .5s,box-shadow .5s;
+  border-bottom:1px solid transparent;
+}
+.site-header.scrolled,
+.site-header.column-header{
+  background:rgba(22,18,14,.82);backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);
+  border-bottom:1px solid var(--line);padding-block:.8rem;
+}
+.brand{display:flex;flex-direction:column;line-height:1.2;text-decoration:none}
+.brand .mark{font-family:var(--serif);font-size:1.2rem;letter-spacing:.16em;color:var(--text-strong);font-weight:500}
+.brand .sub{font-family:var(--sans);font-size:.54rem;letter-spacing:.32em;color:var(--gold-deep);text-transform:uppercase;margin-top:3px}
+.header-cta{
+  font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;color:var(--text-strong);
+  border:1px solid var(--gold);border-radius:2px;padding:.6rem 1.3rem;transition:background .4s,color .4s;
+  text-decoration:none;
+}
+.header-cta:hover{background:var(--gold);color:#fff}
+.header-nav{display:flex;align-items:center;gap:1.2rem}
+.header-column-link{
+  font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;
+  color:var(--text-strong);text-decoration:none;transition:color .4s;
+}
+.header-column-link:hover{color:var(--gold)}
+@media(max-width:560px){.header-cta{display:none}}
+
+/* ---------- フッター（既存と同一） ---------- */
+.site-footer{background:#1C1712;color:var(--on-deep);opacity:.85;text-align:center;padding:3rem var(--pad-inline)}
+.site-footer .fbrand{font-family:var(--serif);font-size:1.1rem;letter-spacing:.16em;color:var(--on-deep);opacity:1;margin-bottom:.6rem}
+.site-footer .fbrand .sub{font-family:var(--sans);font-size:.54rem;letter-spacing:.3em;color:var(--gold-soft);display:block;margin-top:5px;text-transform:uppercase}
+.site-footer .footer-links{margin-top:1rem;display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap}
+.site-footer .footer-links a{font-size:.8rem;color:var(--gold-soft);text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- カード（既存.statと同じ配色・角丸トークン） ---------- */
+.card{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);transition:transform .4s,box-shadow .4s}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+
+
+/* ==========================================================
+   ここから下：コラム機能のための新規クラス
+   （色・フォント・角丸・余白の数値は、上記の値だけを使って構築）
+   ========================================================== */
+
+.column-body{padding-top:6rem}
+
+/* パンくず */
+.breadcrumb{font-size:.8rem;color:var(--text-muted);display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-bottom:1.6rem}
+.breadcrumb a{color:var(--gold-deep);text-decoration:none}
+.breadcrumb a:hover{text-decoration:underline}
+.breadcrumb .sep{opacity:.5}
+.breadcrumb [aria-current="page"]{color:var(--text-strong)}
+
+/* コラムトップ：紹介文 */
+.column-intro{text-align:center;max-width:680px;margin:0 auto}
+
+/* カテゴリー／テーマ一覧（派手な色分けをしない、控えめなピル） */
+.pill-list{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;margin-top:1.6rem}
+.pill{
+  display:inline-flex;align-items:center;font-family:var(--sans);font-size:.78rem;letter-spacing:.04em;
+  padding:.55rem 1.2rem;border-radius:999px;border:1px solid var(--line);color:var(--text-strong);
+  text-decoration:none;transition:border-color .3s,color .3s;background:var(--cream);
+}
+.pill:hover{border-color:var(--gold);color:var(--gold-deep)}
+
+/* 記事カードグリッド（詰め込みすぎない：最大3列・余白広め） */
+.column-grid{display:grid;gap:2.2rem;margin-top:2.4rem}
+@media(min-width:640px){.column-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:980px){.column-grid{grid-template-columns:repeat(3,1fr)}}
+.column-grid.narrow-grid{max-width:900px;margin-inline:auto}
+
+.article-card{overflow:hidden;display:flex;flex-direction:column}
+.article-card-image{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--beige-2)}
+.article-card-body{padding:1.5rem 1.5rem 1.8rem}
+.article-card-cat{font-family:var(--sans);font-size:.68rem;letter-spacing:.12em;color:var(--gold-deep);text-transform:uppercase}
+.article-card-title{font-family:var(--jp-serif);font-size:1.12rem;color:var(--text-strong);margin-top:.6rem;line-height:1.6}
+.article-card-title a{text-decoration:none;color:inherit}
+.article-card-excerpt{font-size:.88rem;color:var(--text-muted);line-height:1.9;margin-top:.6rem}
+.article-card-meta{display:flex;gap:1rem;font-size:.74rem;color:var(--text-muted);margin-top:1rem;flex-wrap:wrap}
+
+/* 記事本文タイポグラフィ */
+.article-body{max-width:680px;margin:0 auto;font-size:1.02rem;line-height:2.05;color:var(--text)}
+.article-body h2{font-family:var(--jp-serif);font-size:clamp(1.4rem,3.4vw,1.8rem);color:var(--text-strong);margin:3rem 0 1.2rem;line-height:1.6}
+.article-body h3{font-family:var(--jp-serif);font-size:clamp(1.12rem,2.6vw,1.34rem);color:var(--text-strong);margin:2.2rem 0 1rem;line-height:1.6}
+.article-body p{margin:1.4rem 0}
+.article-body ul,.article-body ol{margin:1.4rem 0 1.4rem 1.4rem}
+.article-body li{margin:.5rem 0}
+.article-body a{color:var(--gold-deep);text-decoration:underline;text-underline-offset:3px}
+.article-body blockquote{
+  margin:2rem 0;padding:1.2rem 1.6rem;border-left:2px solid var(--gold);background:var(--cream);
+  color:var(--text-strong);font-style:italic;
+}
+.article-body hr{border:none;border-top:1px solid var(--line);margin:2.6rem 0}
+.article-body img{border-radius:var(--radius);margin:1.8rem 0}
+.article-body h2[id],.article-body h3[id]{scroll-margin-top:5.5rem}
+
+/* 注意書き・補足ボックス（:::note ... :::） */
+.callout{
+  margin:2rem 0;padding:1.4rem 1.6rem;border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:var(--radius);background:var(--cream);font-size:.94rem;line-height:1.9;color:var(--text-strong);
+}
+.callout p:first-child{margin-top:0}
+.callout p:last-child{margin-bottom:0}
+
+/* 本文内CTA（:::cta ... :::） */
+.inline-cta{
+  margin:2.4rem 0;padding:1.6rem;border-radius:var(--radius);text-align:center;
+  background:linear-gradient(165deg,#3D2F1E,#241B10);border:1px solid rgba(224,169,176,.3);color:var(--on-deep);
+}
+.inline-cta p{margin:0 0 1rem;color:var(--on-deep)}
+
+/* 目次 */
+.toc{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem 1.8rem;max-width:680px;margin:0 auto 2.6rem}
+.toc-title{font-family:var(--sans);font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:.9rem}
+.toc-list{list-style:none;margin:0;padding:0}
+.toc-list li{margin:.5rem 0;font-size:.9rem}
+.toc-list .toc-h3{margin-left:1.2rem;font-size:.86rem;opacity:.9}
+.toc-list a{color:var(--text-strong);text-decoration:none}
+.toc-list a:hover{color:var(--gold-deep)}
+
+/* FAQ（既存FAQセクションと同じ構造） */
+.faq-list{display:grid;gap:1rem;max-width:720px;margin:2rem auto 0}
+.faq-item{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);padding:1.6rem 1.8rem;text-align:left}
+.faq-q{font-family:var(--jp-serif);font-size:1.02rem;color:var(--text-strong);font-weight:500;line-height:1.7}
+.faq-a{margin-top:.6rem;font-size:.94rem;color:var(--text);line-height:1.9}
+
+/* 参考文献・出典 */
+.refs{max-width:680px;margin:2.4rem auto 0;font-size:.86rem;color:var(--text-muted);line-height:1.9}
+.refs-title{font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:.6rem}
+.refs a{color:var(--gold-deep)}
+
+/* 前後の記事 */
+.prev-next{display:grid;gap:1rem;max-width:680px;margin:3rem auto 0}
+@media(min-width:640px){.prev-next{grid-template-columns:1fr 1fr}}
+.prev-next a{display:block;padding:1.2rem 1.4rem;border:1px solid var(--line);border-radius:var(--radius);text-decoration:none;background:var(--cream)}
+.prev-next .pn-label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep)}
+.prev-next .pn-title{margin-top:.5rem;font-family:var(--jp-serif);color:var(--text-strong);font-size:.96rem;line-height:1.6}
+.prev-next .pn-next{text-align:right}
+
+/* 記事下CTA */
+.article-footer-cta{max-width:680px;margin:3.4rem auto 0;text-align:center;padding:2.2rem 1.8rem;border-radius:var(--radius);
+  background:linear-gradient(165deg,#3D2F1E,#241B10);border:1px solid rgba(224,169,176,.3);}
+.article-footer-cta p{color:var(--on-deep);margin:0 0 1.2rem;font-size:.94rem;line-height:1.9}
+.article-footer-cta .price-note{font-size:.78rem;opacity:.85;margin-top:1rem;color:var(--on-deep-muted)}
+
+/* 検索 */
+.search-form{display:flex;gap:.8rem;max-width:520px;margin:0 auto}
+.search-input{
+  flex:1;font-family:var(--jp-sans);font-size:.94rem;padding:.9rem 1.2rem;border-radius:2px;
+  border:1px solid var(--line);background:var(--cream);color:var(--text-strong);
+}
+.search-input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.search-results-count{text-align:center;color:var(--text-muted);font-size:.86rem;margin-top:1rem}
+.search-empty{text-align:center;color:var(--text-muted);padding:3rem 1rem}
+
+/* 空の状態（記事0件のとき） */
+.empty-state{text-align:center;color:var(--text-muted);padding:3rem 1rem;font-size:.94rem;line-height:1.9}
+
+/* アクセシビリティ：フォーカス表示 */
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* アクセシビリティ：視覚的には隠すがスクリーンリーダーには読ませる */
+.visually-hidden{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}

@@ -1,0 +1,13 @@
+{# パンくずリスト。items: [{label, url}] の配列。最後の要素は現在ページとして扱う #}
+{% macro breadcrumb(items) %}
+<nav class="breadcrumb" aria-label="パンくずリスト">
+  {% for item in items %}
+    {% if not loop.first %}<span class="sep">/</span>{% endif %}
+    {% if loop.last %}
+      <span aria-current="page">{{ item.label }}</span>
+    {% else %}
+      <a href="{{ item.url }}">{{ item.label }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
+{% endmacro %}

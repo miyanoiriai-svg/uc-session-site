@@ -1,0 +1,28 @@
+---
+permalink: /column/search/
+layout: base.njk
+isSearchPage: true
+---
+{% from "partials/breadcrumb.njk" import breadcrumb %}
+
+<div class="container narrow section" style="padding-bottom:0">
+  {{ breadcrumb([{label:"ホーム",url:"/"},{label:"コラム",url:"/column/"},{label:"検索",url:"/column/search/"}]) }}
+</div>
+
+<section class="container tight" style="text-align:center">
+  <p class="eyebrow center">SEARCH</p>
+  <h1 class="h2" style="margin-top:.8rem">コラム内検索</h1>
+  <form class="search-form" id="column-search-form" role="search" style="margin-top:1.6rem">
+    <label class="visually-hidden" for="column-search-input">検索キーワード</label>
+    <input class="search-input" id="column-search-input" type="search" name="q" placeholder="キーワードを入力（例：引き寄せ、恋愛）" autocomplete="off" />
+    <button class="btn btn-ghost" type="submit">検索</button>
+  </form>
+  <p class="search-results-count" id="column-search-count" aria-live="polite"></p>
+</section>
+
+<section class="container section" style="padding-top:0">
+  <div class="column-grid" id="column-search-results"></div>
+  <p class="search-empty" id="column-search-empty" hidden>該当する記事が見つかりませんでした。別のキーワードでお試しください。</p>
+</section>
+
+<script src="/assets/js/column.js" defer></script>

@@ -1,0 +1,15 @@
+{# 自動目次。tocItems: extractToc フィルターの戻り値。記事側で toc: false 指定時は呼び出し側で出し分ける #}
+{% macro tocBlock(tocItems) %}
+{% if tocItems and tocItems.length > 1 %}
+<nav class="toc" aria-label="目次">
+  <p class="toc-title">目次</p>
+  <ul class="toc-list">
+    {% for item in tocItems %}
+    <li class="{{ 'toc-h3' if item.level == 'h3' else '' }}">
+      <a href="#{{ item.id }}">{{ item.text }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
+{% endmacro %}

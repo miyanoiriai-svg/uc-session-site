@@ -1,0 +1,17 @@
+{# FAQ一覧。faqs: [{q, a}] の配列。空/未指定なら何も出力しない（架空のFAQを作らない） #}
+{% macro faqList(faqs) %}
+{% if faqs and faqs.length %}
+<section class="faq-section" aria-label="よくある質問">
+  <p class="eyebrow center">FAQ</p>
+  <h2 class="h3" style="text-align:center;margin-top:.6rem">よくある質問</h2>
+  <div class="faq-list">
+    {% for item in faqs %}
+    <div class="faq-item">
+      <p class="faq-q">Q. {{ item.q }}</p>
+      <p class="faq-a">A. {{ item.a }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endmacro %}

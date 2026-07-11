@@ -1,0 +1,19 @@
+---
+permalink: /column/search-index.json
+eleventyExcludeFromCollections: true
+---
+{%- set items = [] -%}
+{%- for article in collections.columnArticles -%}
+  {%- set catInfo = categories[article.data.category] -%}
+  {%- set items = items.concat([{
+    title: article.data.title,
+    url: "/column/" + article.data.slug + "/",
+    excerpt: (article.data.excerpt or "") | safeExcerpt(120),
+    body: article.templateContent | safeExcerpt(500),
+    category: article.data.category or "",
+    categoryName: (catInfo.name if catInfo else ""),
+    tags: article.data.tags or [],
+    publishDate: article.data.publish_date | isoDate
+  }]) -%}
+{%- endfor -%}
+{{ items | dump | safe }}

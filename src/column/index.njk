@@ -1,0 +1,76 @@
+---
+layout: base.njk
+permalink: /column/
+---
+{% from "partials/article-card.njk" import articleCard %}
+{% from "partials/breadcrumb.njk" import breadcrumb %}
+{% from "partials/cta.njk" import footerCta %}
+
+<div class="container narrow section" style="padding-bottom:0">
+  {{ breadcrumb([{label:"ホーム",url:"/"},{label:"コラム",url:"/column/"}]) }}
+</div>
+
+<section class="container tight" style="padding-inline:var(--pad-inline);text-align:center">
+  <p class="eyebrow center">COLUMN</p>
+  <h1 class="display" style="margin-top:1rem">コラム</h1>
+  <p class="lead" style="margin-top:1.4rem">
+    宇宙意識との繋がり、潜在意識のしくみ、自己肯定感や人間関係、お金との向き合い方まで。<br>
+    UCセッションの視点から、日々のヒントをお届けします。
+  </p>
+
+  <form class="search-form" action="/column/search/" method="get" role="search" style="margin-top:2.4rem">
+    <label class="visually-hidden" for="column-top-search">コラム内を検索</label>
+    <input class="search-input" id="column-top-search" type="search" name="q" placeholder="キーワードで探す（例：潜在意識、恋愛）" />
+    <button class="btn btn-ghost" type="submit">検索</button>
+  </form>
+</section>
+
+{% set featuredList = collections.columnArticles | featuredOnly %}
+{% set newList = collections.columnArticles | firstN(9) %}
+
+{% if collections.columnArticles.length == 0 %}
+<section class="container tight section" style="padding-top:0">
+  <p class="empty-state">
+    ただいまコラム記事を準備中です。近日公開予定ですので、しばらくお待ちください。<br>
+    公開までの間は、下記のテーマやUCセッションについての情報をご覧いただけます。
+  </p>
+</section>
+{% else %}
+
+  {% if featuredList.length %}
+  <section class="container section" style="padding-top:0">
+    <p class="eyebrow center">FEATURED</p>
+    <h2 class="h2" style="text-align:center;margin-top:.8rem">注目のコラム</h2>
+    <div class="column-grid narrow-grid">
+      {% for article in featuredList %}
+        {{ articleCard(article, categories) }}
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="container section" style="padding-top:0">
+    <p class="eyebrow center">NEW</p>
+    <h2 class="h2" style="text-align:center;margin-top:.8rem">新着コラム</h2>
+    <div class="column-grid">
+      {% for article in newList %}
+        {{ articleCard(article, categories) }}
+      {% endfor %}
+    </div>
+  </section>
+
+{% endif %}
+
+<section class="container tight section" style="text-align:center">
+  <p class="eyebrow center">THEME</p>
+  <h2 class="h2" style="margin-top:.8rem">テーマから探す</h2>
+  <div class="pill-list">
+    {% for slug, cat in categories %}
+    <a class="pill" href="/column/category/{{ slug }}/">{{ cat.name }}</a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container tight section">
+  {{ footerCta(site) }}
+</section>

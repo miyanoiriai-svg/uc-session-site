@@ -1,0 +1,17 @@
+{# 記事下・本文中で共通利用するCTA。文言は既存サイトの事実（料金・予約URL）のみを使用し、誇張や架空の実績は追加しない #}
+{% macro footerCta(site) %}
+<div class="article-footer-cta">
+  <p class="h3" style="color:var(--on-deep)">本来のあなたへ還る、UCセッション</p>
+  <p>宇宙意識と繋がり、潜在意識の負の思いを取り除いていく45分。<br>オンライン・全国対応で、UCセラピスト®が対応します。</p>
+  <a class="btn btn-gold" href="{{ site.bookingUrl }}" target="_blank" rel="noopener">UCセラピスト一覧・予約はこちら</a>
+  <p class="price-note">{{ site.priceFirstTimeText }}／{{ site.priceNormalText }}</p>
+</div>
+{% endmacro %}
+
+{# 本文中インラインCTA（:::cta ... ::: で使う内側の内容とは別に、テンプレート側からも呼べるようにするための簡易版） #}
+{% macro inlineCta(site) %}
+<div class="inline-cta">
+  <p>まずは、あなた自身の潜在意識と向き合うところから。</p>
+  <a class="btn btn-outline" href="{{ site.bookingUrl }}" target="_blank" rel="noopener">UCセッションを見てみる</a>
+</div>
+{% endmacro %}

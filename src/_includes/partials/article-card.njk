@@ -1,0 +1,31 @@
+{# 記事カード（コラムトップ・カテゴリー・タグ・検索・関連記事で共通利用） #}
+{% macro articleCard(article, categories) %}
+<article class="card article-card">
+  {% if article.data.featured_image %}
+  <img
+    class="article-card-image"
+    src="{{ article.data.featured_image }}"
+    alt="{{ article.data.featured_image_alt or article.data.title }}"
+    width="640" height="400"
+    loading="lazy" decoding="async"
+  />
+  {% endif %}
+  <div class="article-card-body">
+    {% if categories[article.data.category] %}
+    <p class="article-card-cat">
+      <a href="/column/category/{{ article.data.category }}/">{{ categories[article.data.category].name }}</a>
+    </p>
+    {% endif %}
+    <h3 class="article-card-title">
+      <a href="/column/{{ article.data.slug }}/">{{ article.data.title }}</a>
+    </h3>
+    {% if article.data.excerpt %}
+    <p class="article-card-excerpt">{{ article.data.excerpt | safeExcerpt(96) }}</p>
+    {% endif %}
+    <div class="article-card-meta">
+      <span>{{ article.data.publish_date | jaDate }}</span>
+      <span>{{ article.templateContent | readingTime }}分で読めます</span>
+    </div>
+  </div>
+</article>
+{% endmacro %}

@@ -1,0 +1,129 @@
+<!--
+  base.njk — コラム全ページ共通レイアウト。
+
+  SEO用の値（タイトル・description・canonical・OGP画像・robots・構造化データ）は、
+  ページの種類ごとにここで一括して決定する。
+  ・article  … src/column/article.njk のページネーションaliasが存在する＝記事詳細ページ
+  ・cat      … src/column/category.njk のページネーションaliasが存在する＝カテゴリー一覧
+  ・tagItem  … src/column/tag.njk のページネーションaliasが存在する＝タグ一覧
+  ・isSearchPage … 検索ページ（フロントマターの固定値）
+  ・それ以外  … 各ページが自分のフロントマターで pageTitle 等を直接指定する（コラムトップ等）
+  条件分岐をテンプレート内に集約することで、各ページのフロントマターで
+  複雑なcomputed式を書く必要がないようにしている。
+-->
+{% if article %}
+  {% set _title = article.data | metaTitle(site.siteName) %}
+  {% set _desc = article.data | metaDescription(site.defaultMetaDescription) %}
+  {% set _canonical = article.data | canonicalFor(site.siteUrl, "/column/" + article.data.slug + "/") %}
+  {% set _ogImage = article.data | ogImageFor(site) %}
+  {% set _robots = article.data | robotsMeta %}
+  {% set _structured = article.data | articleStructuredData(site) %}
+  {% set _ogType = "article" %}
+{% elif cat %}
+  {% set _catArticles = collections.columnArticles | byCategory(cat.slug) %}
+  {% set _title = cat.name + "の記事一覧｜コラム | " + site.siteName %}
+  {% set _desc = cat.description %}
+  {% set _canonical = site.siteUrl + "/column/category/" + cat.slug + "/" %}
+  {% set _ogImage = site.siteUrl + site.ogImagePath %}
+  {% set _robots = "index,follow" if _catArticles.length > 0 else "noindex,follow" %}
+  {% set _structured = site | listPageStructuredData(cat.name + "の記事一覧", "/column/category/" + cat.slug + "/") %}
+  {% set _ogType = "website" %}
+{% elif tagItem %}
+  {% set _title = "「" + tagItem.tag + "」の記事一覧｜コラム | " + site.siteName %}
+  {% set _desc = "「" + tagItem.tag + "」に関するコラム記事の一覧です。" %}
+  {% set _canonical = site.siteUrl + "/column/tag/" + (tagItem.tag | urlencode) + "/" %}
+  {% set _ogImage = site.siteUrl + site.ogImagePath %}
+  {% set _robots = "index,follow" %}
+  {% set _structured = site | listPageStructuredData("「" + tagItem.tag + "」の記事一覧", "/column/tag/" + (tagItem.tag | urlencode) + "/") %}
+  {% set _ogType = "website" %}
+{% elif isSearchPage %}
+  {% set _title = "コラム内検索 | " + site.siteName %}
+  {% set _desc = "UC Sessionコラムの記事をキーワードで検索できます。" %}
+  {% set _canonical = site.siteUrl + "/column/search/" %}
+  {% set _ogImage = site.siteUrl + site.ogImagePath %}
+  {% set _robots = "noindex,follow" %}
+  {% set _ogType = "website" %}
+{% elif page.url == "/column/" %}
+  {% set _title = "コラム｜宇宙意識・潜在意識・スピリチュアルな気づきのヒント | " + site.siteName %}
+  {% set _desc = site.defaultMetaDescription %}
+  {% set _canonical = site.siteUrl + "/column/" %}
+  {% set _ogImage = site.siteUrl + site.ogImagePath %}
+  {% set _robots = "index,follow" %}
+  {% set _structured = site | listPageStructuredData(site.siteName + " コラム", "/column/") %}
+  {% set _ogType = "website" %}
+{% else %}
+  {% set _title = pageTitle %}
+  {% set _desc = pageDescription %}
+  {% set _canonical = canonicalUrl %}
+  {% set _ogImage = ogImageUrl %}
+  {% set _robots = robotsContent or "index,follow" %}
+  {% set _structured = structuredData %}
+  {% set _ogType = ogType or "website" %}
+{% endif %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{{ _title }}</title>
+<meta name="description" content="{{ _desc }}" />
+<link rel="canonical" href="{{ _canonical }}" />
+<meta name="robots" content="{{ _robots }}" />
+<meta name="author" content="UC Session" />
+
+<meta property="og:type" content="{{ _ogType }}" />
+<meta property="og:site_name" content="{{ site.siteName }}" />
+<meta property="og:title" content="{{ _title }}" />
+<meta property="og:description" content="{{ _desc }}" />
+<meta property="og:url" content="{{ _canonical }}" />
+<meta property="og:image" content="{{ _ogImage }}" />
+<meta property="og:locale" content="ja_JP" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ _title }}" />
+<meta name="twitter:description" content="{{ _desc }}" />
+<meta name="twitter:image" content="{{ _ogImage }}" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@200;300;400;500&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/column.css" />
+
+{% if _structured %}
+<script type="application/ld+json">
+{{ _structured | dump | safe }}
+</script>
+{% endif %}
+</head>
+<body>
+
+<header class="site-header column-header" id="header">
+  <a class="brand" href="/">
+    <span class="mark">UC</span>
+    <span class="sub">Universe Connect</span>
+  </a>
+  <nav class="header-nav">
+    <a class="header-column-link" href="/column/">コラム</a>
+    <a class="header-cta" href="{{ site.bookingUrl }}" target="_blank" rel="noopener">UCセラピスト一覧・予約</a>
+  </nav>
+</header>
+
+<main class="column-body">
+{{ content | safe }}
+</main>
+
+<footer class="site-footer">
+  <div class="fbrand">UC<span class="sub">Universe Connect</span></div>
+  <div class="footer-links">
+    <a href="/">ブランドサイト</a>
+    <a href="/column/">コラム</a>
+    <a href="{{ site.bookingUrl }}" target="_blank" rel="noopener">UCセッションを受ける</a>
+  </div>
+  <small>&copy; <span id="footer-year"></span> UC Session. All rights reserved.</small>
+</footer>
+
+<script>
+  document.getElementById('footer-year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

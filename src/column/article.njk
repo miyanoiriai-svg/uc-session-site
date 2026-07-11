@@ -1,0 +1,114 @@
+---
+pagination:
+  data: collections.columnArticles
+  size: 1
+  alias: article
+permalink: "/column/{{ article.data.slug }}/"
+layout: base.njk
+---
+{% from "partials/breadcrumb.njk" import breadcrumb %}
+{% from "partials/toc.njk" import tocBlock %}
+{% from "partials/faq.njk" import faqList %}
+{% from "partials/article-card.njk" import articleCard %}
+{% from "partials/cta.njk" import footerCta %}
+
+{% set catInfo = categories[article.data.category] %}
+{% set tocItems = article.templateContent | extractToc %}
+
+{% set breadcrumbItems = [{label:"ホーム", url:"/"}, {label:"コラム", url:"/column/"}] %}
+{% if catInfo %}
+  {% set breadcrumbItems = breadcrumbItems.concat([{label: catInfo.name, url: "/column/category/" + article.data.category + "/"}]) %}
+{% endif %}
+{% set breadcrumbItems = breadcrumbItems.concat([{label: article.data.title, url: "/column/" + article.data.slug + "/"}]) %}
+
+<div class="container narrow section" style="padding-bottom:0">
+  {{ breadcrumb(breadcrumbItems) }}
+</div>
+
+<article class="container narrow section" style="padding-top:0">
+  {% if catInfo %}
+  <p class="eyebrow" style="margin-bottom:.4rem">
+    <a href="/column/category/{{ article.data.category }}/" style="color:inherit;text-decoration:none">{{ catInfo.name }}</a>
+  </p>
+  {% endif %}
+  <h1 class="h2">{{ article.data.title }}</h1>
+
+  <div class="article-card-meta" style="margin-top:1.2rem">
+    <span>公開日：{{ article.data.publish_date | jaDate }}</span>
+    {% if article.data.updated_date %}<span>更新日：{{ article.data.updated_date | jaDate }}</span>{% endif %}
+    <span>{{ article.templateContent | readingTime }}分で読めます</span>
+  </div>
+  <div class="article-card-meta" style="margin-top:.4rem">
+    <span>執筆：{{ article.data.author or site.siteName }}</span>
+    {% if article.data.supervisor %}<span>監修：{{ article.data.supervisor }}</span>{% endif %}
+  </div>
+
+  {% if article.data.featured_image %}
+  <img
+    src="{{ article.data.featured_image }}"
+    alt="{{ article.data.featured_image_alt or article.data.title }}"
+    width="1200" height="750"
+    style="width:100%;border-radius:var(--radius);margin-top:2rem"
+    loading="eager" decoding="async" fetchpriority="high"
+  />
+  {% endif %}
+
+  {% if article.data.toc_enabled != false %}
+    {{ tocBlock(tocItems) }}
+  {% endif %}
+
+  <div class="article-body">
+    {{ article.templateContent | safe }}
+  </div>
+
+  {% if article.data.references and article.data.references.length %}
+  <div class="refs">
+    <p class="refs-title">参考文献・出典</p>
+    <ul>
+      {% for ref in article.data.references %}
+      <li>{% if ref.url %}<a href="{{ ref.url }}" target="_blank" rel="noopener nofollow">{{ ref.title }}</a>{% else %}{{ ref.title }}{% endif %}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {{ faqList(article.data.faq) }}
+
+  {% if article.data.footer_cta_enabled != false %}
+    {{ footerCta(site) }}
+  {% endif %}
+</article>
+
+{% set related = article | relatedArticles(collections.columnArticles) %}
+{% if related.length %}
+<section class="container section" style="padding-top:0">
+  <p class="eyebrow center">RELATED</p>
+  <h2 class="h2" style="text-align:center;margin-top:.8rem">関連するコラム</h2>
+  <div class="column-grid narrow-grid">
+    {% for a in related %}
+      {{ articleCard(a, categories) }}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% set prevA = article | prevArticle(collections.columnArticles) %}
+{% set nextA = article | nextArticle(collections.columnArticles) %}
+{% if prevA or nextA %}
+<div class="container narrow" style="padding-bottom:var(--pad-block)">
+  <div class="prev-next">
+    {% if prevA %}
+    <a href="/column/{{ prevA.data.slug }}/">
+      <span class="pn-label">前の記事</span>
+      <span class="pn-title">{{ prevA.data.title }}</span>
+    </a>
+    {% endif %}
+    {% if nextA %}
+    <a class="pn-next" href="/column/{{ nextA.data.slug }}/">
+      <span class="pn-label">次の記事</span>
+      <span class="pn-title">{{ nextA.data.title }}</span>
+    </a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

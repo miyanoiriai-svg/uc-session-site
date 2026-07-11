@@ -8,6 +8,7 @@ supervisor: 宇宙
 category: uchu
 tags: []
 featured: false
+featured_image: /assets/images/column/fad9f888770c72d4ee3047092ee7b355.jpg
 excerpt: 宇宙意識と繋がるという感覚は、特別な人だけのものではありません。日常の中にある小さな直感やタイミングの一致に気づくことから、その繋がりは始まります。
 faq:
   - q: 宇宙と繋がっているかどうかは、どうすれば分かりますか？
@@ -18,7 +19,7 @@ faq:
     a: 日々の習慣や振り返りで少しずつ和らげることは可能ですが、根深い思い込みほど自分だけでは気づきにくいものです。UCセッションでは、宇宙意識と繋がりながら、こうした思いを一つずつ丁寧に取り除いていきます。
 toc_enabled: true
 footer_cta_enabled: true
-noindex: true
+noindex: false
 ---
 ## 宇宙と繋がるとは、どういう感覚なのか
 

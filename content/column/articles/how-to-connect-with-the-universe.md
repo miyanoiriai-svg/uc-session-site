@@ -24,7 +24,7 @@ faq:
     q: " 毎日続けた方がいいですか？"
 toc_enabled: true
 footer_cta_enabled: true
-og_image: /assets/images/column/28709a6d268325692a04216ed7a5ff6c.jpg
+og_image: /assets/images/column/heidi-ostergaad-dupe-1-.jpeg
 noindex: false
 ---
 # 宇宙と繋がる方法｜今日からできる7つの習慣

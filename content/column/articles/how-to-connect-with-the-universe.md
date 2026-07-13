@@ -24,7 +24,7 @@ faq:
     q: " 毎日続けた方がいいですか？"
 toc_enabled: true
 footer_cta_enabled: true
-og_image: /assets/images/column/90fa384c-9a23-4db5-9b5c-93a7c86f24c0.jpeg
+og_image: /assets/images/column/28709a6d268325692a04216ed7a5ff6c.jpg
 noindex: false
 ---
 # 宇宙と繋がる方法｜今日からできる7つの習慣
